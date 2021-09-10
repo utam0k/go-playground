@@ -2,16 +2,23 @@ package main
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"testing"
 )
 
 func TestCountNumberOfLines(t *testing.T) {
-	tmpFile, _ := ioutil.TempFile("", "tmptest")
+	tmpFile, err := ioutil.TempFile("", "tmptest")
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer os.Remove(tmpFile.Name())
 	expectedNumberOfLines := 10
 	for i := 0; i < expectedNumberOfLines; i++ {
-		tmpFile.WriteString("\n")
+		_, err := tmpFile.WriteString("\n")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	type args struct {
