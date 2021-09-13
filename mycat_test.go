@@ -37,8 +37,8 @@ func TestCountNumberOfLines(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := count_number_of_lines(tt.args.file); got != tt.expect {
-				t.Errorf("count_number_of_lines() = %v, want %v", got, tt.expect)
+			if got, _ := countNumberOfLines(tt.args.file); got != tt.expect {
+				t.Errorf("countNumberOfLines() = %v, want %v", got, tt.expect)
 			}
 		})
 	}

@@ -30,7 +30,7 @@ func lineCounter(r io.Reader) (int, error) {
 	}
 }
 
-func print_file(number *int, file_name string, is_output_lines bool, max_digits uint8) {
+func printFile(number *int, file_name string, is_output_lines bool, max_digits uint8) {
 	file, err := os.Open(file_name)
 	if err != nil {
 		log.Fatal("failed to open")
@@ -54,36 +54,36 @@ func print_file(number *int, file_name string, is_output_lines bool, max_digits 
 	}
 }
 
-func count_number_of_lines(file_name string) (int, error) {
+func countNumberOfLines(file_name string) (int, error) {
 	file, err := os.Open(file_name)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	number_of_lines, err := lineCounter(file)
+	numberOfLines, err := lineCounter(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return number_of_lines, nil
+	return numberOfLines, nil
 }
 
 func main() {
-	var is_output_lines = flag.Bool("n", false, "Number the output lines, starting at 1.")
+	var isOutputLines = flag.Bool("n", false, "Number the output lines, starting at 1.")
 	flag.Parse()
-	file_names := flag.Args()
+	fileNames := flag.Args()
 
-	var total_number_of_lines int
-	for _, file_name := range file_names {
-		number_of_lines, err := count_number_of_lines(file_name)
+	var totalNumberOfLines int
+	for _, fileName := range fileNames {
+		numberOfLines, err := countNumberOfLines(fileName)
 		if err != nil {
 			log.Fatal(err)
 		}
-		total_number_of_lines += number_of_lines
+		totalNumberOfLines += numberOfLines
 	}
-	line_count_max_digit := uint8(math.Log10(float64(total_number_of_lines))) + 1
+	lineCountMaxDigit := uint8(math.Log10(float64(totalNumberOfLines))) + 1
 
 	var number int
-	for _, file_name := range file_names {
-		print_file(&number, file_name, *is_output_lines, line_count_max_digit)
+	for _, fileName := range fileNames {
+		printFile(&number, fileName, *isOutputLines, lineCountMaxDigit)
 	}
 }
