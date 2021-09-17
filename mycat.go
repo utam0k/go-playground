@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -20,11 +21,10 @@ func lineCounter(r io.Reader) (int, error) {
 		c, err := r.Read(buf)
 		count += bytes.Count(buf[:c], lineSep)
 
-		switch {
-		case err == io.EOF:
+		if errors.Is(err, io.EOF) {
 			return count, nil
-
-		case err != nil:
+		}
+		if err != nil {
 			return count, err
 		}
 	}
@@ -57,12 +57,12 @@ func printFile(number *int, file_name string, is_output_lines bool, max_digits u
 func countNumberOfLines(file_name string) (int, error) {
 	file, err := os.Open(file_name)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	defer file.Close()
 	numberOfLines, err := lineCounter(file)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	return numberOfLines, nil
 }
