@@ -1,1 +1,4 @@
-mycat
+/mycat
+/typing
+!cmd/typing/*
+!cmd/mycat/*
