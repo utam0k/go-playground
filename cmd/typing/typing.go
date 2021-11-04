@@ -1,31 +1,43 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"time"
 )
 
 func main() {
-	ch := make(chan struct{})
-	timer := time.NewTimer(2 * time.Second)
+	problems := [...]string{"Golang", "Rust", "Python", "Ruby", "Java", "Scala"}
+	ch := make(chan string)
+	timer := time.NewTimer(5 * time.Second)
 	go func() {
-		defer close(ch)
-		for i := 0; i < 10; i++ {
-			time.Sleep(time.Second * 1)
-			ch <- struct{}{}
+		for {
+			reader := bufio.NewReader(os.Stdin)
+			line, _, err := reader.ReadLine()
+			if err != nil {
+				log.Fatal("failed to read a rune.")
+			}
+			ch <- string(line)
 		}
 	}()
-	for {
+
+	for _, p := range problems {
+		fmt.Println(p)
 		select {
 		case <-timer.C:
 			fmt.Println("A Timer finished")
 			return
-		case _, ok := <-ch:
+		case answer, ok := <-ch:
 			if !ok {
 				return
 			}
-			log.Println("OK")
+			if p == answer {
+				fmt.Println("OK")
+			} else {
+				fmt.Println("NG")
+			}
 		}
 	}
 }
